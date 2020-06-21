@@ -12,7 +12,7 @@ run metric before running this code
 #%% import libraries/modules
 
 import pandas as pd
-from __future__ import print_function
+#from __future__ import print_function
 import statsmodels.api as sm
 import numpy as np
 import os
@@ -62,15 +62,17 @@ data['endog'] = data.loc[:,'days_unsold']
 
 data_onehot = pd.get_dummies(data, columns=['country_code'], prefix = ['country'])
 
-mod_nb = sm.OLS.from_formula('days_unsold ~ suggested_price_maximum + (country_code)', data=data).fit()
+mod_nb = sm.OLS.from_formula('days_unsold ~ suggested_price_maximum + C(country_code)', data=data).fit()
 
 print(mod_nb.summary())
 
 
+#%%
 
 
-
-
+mod_nbin = sm.NegativeBinomial.from_formula('days_unsold ~ suggested_price_maximum + C(country_code)', data=data)
+res_nbin = mod_nbin.fit(disp=False)
+print(res_nbin.summary())
 
 
 
