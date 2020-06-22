@@ -29,7 +29,7 @@ pd.ExcelFile("xx.xlsx").sheet_names
 Adding the value of the macro economic variable to the mix 
 '''
 
-df = pd.read_excel("input_tlc_2020.xlsx", "fin_macro")
+df = pd.read_excel("xx.xlsx", "fin_macro")
 
 df.columns=df.columns.str.strip()
 
@@ -107,11 +107,11 @@ df.reset_index(inplace = True)
 
 df.set_index(['area','ANNO'], inplace = True)
 
-df['y'] = np.log(df['Volumi']/df['POPCR'])
+df['y'] = np.log(df['xx']/df['xx'])
 
-df['x_1']= np.log(df['Prezzi']/df['totprice'])
+df['x_1']= np.log(df['xx']/df['xx'])
 
-df['x_2']= np.log(df['CF']/df['POPCR'])
+df['x_2']= np.log(df['xx']/df['xx'])
 
 
 
@@ -208,9 +208,9 @@ final2['y_est'] =(resr.params[0]+resr.params[1]*final2['x_1'] + constraint*final
 removing the natural log to obtain the nominal value of volumi
 '''
 
-final2['volumi_est']= np.exp(final2['y_est'])
+final2['xx']= np.exp(final2['xx'])
 
-final2['valori_est'] = final2['volumi_est']*final2.Prezzi
+final2['xx'] = final2['xx']*final2.Prezzi
 
 #%%
 
@@ -218,7 +218,7 @@ final2['valori_est'] = final2['volumi_est']*final2.Prezzi
 Adding the macro value of volumi to final2 so as to compare the estimated provincial values at a macro level with the observed values at the macro level
 '''
 
-comp1 = pd.DataFrame(final2.groupby(['area_x','ANNO']).sum()['valori_est'])
+comp1 = pd.DataFrame(final2.groupby(['xx','xx']).sum()['xx'])
 
 
 
