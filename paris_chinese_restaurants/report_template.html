@@ -1,0 +1,125 @@
+<title>Southern Chinese Paris</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; a header, a filter bar, then two scan tables (southern, halal) */
+:root {
+  --bg: #f6f8f7; --surface: #ffffff; --fg: #18232a; --muted: #5b6a70; --line: #d9e1df;
+  --accent: #1f6f5c; --accent-soft: #dcefe8; --warn: #9a5b00; --warn-soft: #fbefd9;
+  --cert: #1f6f5c; --claim: #6b4fa0; --claim-soft: #ece6f6;
+  --display: "Young Serif", Georgia, serif;
+  --body: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #10171a; --surface: #172126; --fg: #e4ecea; --muted: #94a5a9; --line: #2a383d;
+  --accent: #5fc3a6; --accent-soft: #173a31; --warn: #f0b45a; --warn-soft: #3a2c14;
+  --cert: #5fc3a6; --claim: #b9a2e6; --claim-soft: #2c2440; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #10171a; --surface: #172126; --fg: #e4ecea; --muted: #94a5a9; --line: #2a383d;
+  --accent: #5fc3a6; --accent-soft: #173a31; --warn: #f0b45a; --warn-soft: #3a2c14;
+  --cert: #5fc3a6; --claim: #b9a2e6; --claim-soft: #2c2440; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--body); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 32px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 28px; }
+header { display: grid; gap: 8px; }
+.eyebrow { font: 500 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+h1 { font: 400 clamp(28px, 5vw, 42px)/1.1 var(--display); margin: 0; text-wrap: balance; }
+h2 { font: 400 24px/1.2 var(--display); margin: 0; display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+h2 .count { font: 500 13px var(--mono); color: var(--muted); }
+.lede { color: var(--muted); max-width: 68ch; margin: 0; }
+.filters { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.filters input, .filters select { font: inherit; padding: 8px 10px; border: 1px solid var(--line);
+  border-radius: 6px; background: var(--surface); color: var(--fg); min-width: 0; }
+.filters input { flex: 1 1 220px; }
+.filters label { font-size: 13px; color: var(--muted); display: flex; gap: 6px; align-items: center; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+section { display: grid; gap: 12px; min-width: 0; }
+.note { font-size: 13px; color: var(--muted); margin: 0; max-width: 80ch; }
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 880px; }
+th, td { text-align: left; vertical-align: top; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+th { font: 500 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
+  cursor: pointer; user-select: none; white-space: nowrap; }
+th[aria-sort] { color: var(--fg); }
+tr:last-child td { border-bottom: 0; }
+td:nth-child(2) { font: 500 14px var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+td:first-child { width: 28%; }
+small { color: var(--muted); font-size: 12.5px; }
+a { color: var(--accent); }
+.tag { font: 500 11px var(--mono); padding: 2px 7px; border-radius: 99px; text-transform: uppercase;
+  letter-spacing: .04em; background: var(--line); color: var(--muted); }
+.tag.certified { background: var(--accent-soft); color: var(--cert); }
+.tag.claimed { background: var(--claim-soft); color: var(--claim); }
+.warn { display: inline-block; font-size: 11.5px; background: var(--warn-soft); color: var(--warn);
+  padding: 1px 6px; border-radius: 4px; }
+.empty { padding: 20px; color: var(--muted); }
+footer { font-size: 12.5px; color: var(--muted); }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Paris 1er – 20e · generated {{GENERATED}}</div>
+    <h1>New southern Chinese restaurants in Paris</h1>
+    <p class="lede">Cantonese, Hong Kong, Teochew, Hakka, Fujian, Hainanese, Guangxi and Yunnan places that opened recently, plus a separate list of halal Chinese options. Every address was geocoded and checked against the Paris city boundary.</p>
+  </header>
+
+  <div class="filters">
+    <input id="q" type="search" placeholder="Search name, dish, street…" aria-label="Search">
+    <label for="arr">Arrondissement
+      <select id="arr"><option value="">All</option></select>
+    </label>
+  </div>
+
+  <section>
+    <h2>Southern Chinese <span class="count">{{N_SOUTH}} places</span></h2>
+    <div class="scroll"><table id="south">{{HEAD}}<tbody>{{SOUTH_ROWS}}</tbody></table></div>
+  </section>
+
+  <section>
+    <h2>Halal Chinese <span class="count">{{N_HALAL}} places</span></h2>
+    <p class="note"><strong>Certified</strong> means a named certifier is cited. <strong>Claimed</strong> means the restaurant, its menu or reviews say halal, but no certificate was found, so ask on site. Most halal Chinese food in Paris is Hui or Uyghur (north-west China) rather than southern.</p>
+    <div class="scroll"><table id="halal">{{HEAD}}<tbody>{{HALAL_ROWS}}</tbody></table></div>
+  </section>
+
+  <footer>Sources: TripAdvisor (via search results), Le Fooding, Time Out, Sortir à Paris, press. Opening dates and halal status come from those sources; check before booking. Map data © OpenStreetMap contributors.</footer>
+</div>
+
+<script>
+(function () {
+  const tables = [...document.querySelectorAll("table")];
+  const q = document.getElementById("q"), arr = document.getElementById("arr");
+  const arrs = new Set();
+  tables.forEach(t => t.querySelectorAll("tbody tr").forEach(r => {
+    const v = r.children[1].textContent.match(/^\d+e/); if (v) arrs.add(v[0]);
+  }));
+  [...arrs].sort((a, b) => parseInt(a) - parseInt(b)).forEach(a => arr.add(new Option(a, a)));
+  function filter() {
+    const s = q.value.trim().toLowerCase(), a = arr.value;
+    tables.forEach(t => {
+      let shown = 0;
+      t.querySelectorAll("tbody tr:not(.empty-row)").forEach(r => {
+        const ok = (!s || r.textContent.toLowerCase().includes(s)) &&
+                   (!a || r.children[1].textContent.startsWith(a));
+        r.hidden = !ok; if (ok) shown++;
+      });
+      let e = t.querySelector(".empty-row");
+      if (!e) { e = t.tBodies[0].insertRow(); e.className = "empty-row";
+        const c = e.insertCell(); c.colSpan = 8; c.className = "empty"; c.textContent = "No restaurants match these filters."; }
+      e.hidden = shown > 0;
+    });
+  }
+  q.addEventListener("input", filter); arr.addEventListener("change", filter);
+  tables.forEach(t => t.querySelectorAll("th").forEach((th, i) => th.addEventListener("click", () => {
+    const asc = th.getAttribute("aria-sort") !== "ascending";
+    t.querySelectorAll("th").forEach(h => h.removeAttribute("aria-sort"));
+    th.setAttribute("aria-sort", asc ? "ascending" : "descending");
+    const key = r => r.children[i].dataset.sort || r.children[i].textContent.trim().toLowerCase();
+    const rows = [...t.tBodies[0].rows].filter(r => !r.classList.contains("empty-row"));
+    rows.sort((x, y) => (key(x) > key(y) ? 1 : key(x) < key(y) ? -1 : 0) * (asc ? 1 : -1))
+        .forEach(r => t.tBodies[0].appendChild(r));
+  })));
+  filter();
+})();
+</script>
